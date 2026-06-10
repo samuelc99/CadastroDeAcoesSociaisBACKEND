@@ -3,7 +3,9 @@ import { ok, created, noContent, notFound, serverError, badRequest } from "../ut
 
 export async function list(req, res) {
   try {
-    const actions = await prisma.action.findMany({ orderBy: { createdAt: "desc" } });
+    const actions = await prisma.action.findMany({
+      where: {status: "APPROVED"},orderBy: {createdAt: "desc"}});
+      
     return ok(res, actions);
   } catch (e) {
     return serverError(res, e);
@@ -22,8 +24,12 @@ export async function get(req, res) {
 
 export async function create(req, res) {
   try {
-    const data = req.body;
-    const action = await prisma.action.create({ data });
+    const action = await prisma.action.create({
+      data: {
+        ...req.body,
+        status: "PENDING"
+      }
+    });
     return created(res, action);
   } catch (e) {
     return badRequest(res, e.message);

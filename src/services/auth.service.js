@@ -21,7 +21,16 @@ export async function login({ email, password }) {
 }
 
 function sign(user) {
-  return jwt.sign({ id: user.id, email: user.email, role: user.role }, env.JWT_SECRET, { expiresIn: '7d' });
+  return jwt.sign(
+    {
+      id: user.id,
+      email: user.email
+    },
+    env.JWT_SECRET,
+    {
+      expiresIn: "7d"
+    }
+  );
 }
 
 function sanitizeUser(user) {
